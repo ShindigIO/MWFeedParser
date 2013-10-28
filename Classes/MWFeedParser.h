@@ -126,10 +126,13 @@ typedef enum { FeedTypeUnknown, FeedTypeRSS, FeedTypeRSS1, FeedTypeAtom } FeedTy
 // Whether parsing is in progress
 @property (nonatomic, readonly, getter=isParsing) BOOL parsing;
 
+@property (nonatomic, retain) NSDictionary* headerFields;
+
 #pragma mark Public Methods
 
 // Init MWFeedParser with a URL string
 - (id)initWithFeedURL:(NSURL *)feedURL;
+- (id)initWithFeedURL:(NSURL *)feedURL andHTTPHeaderFields:(NSDictionary*) headerFields;
 
 // Begin parsing
 - (BOOL)parse;

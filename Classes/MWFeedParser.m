@@ -97,6 +97,13 @@
 	return self;
 }
 
+- (id)initWithFeedURL:(NSURL *)feedURL andHTTPHeaderFields:(NSDictionary*) headerFields {
+	if ((self = [self initWithFeedURL:feedURL])) {
+		self.headerFields = headerFields;
+	}
+	return self;
+}
+
 - (void)dealloc {
 	[urlConnection release];
 	[url release];
@@ -158,6 +165,10 @@
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url
 												  cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData 
 											  timeoutInterval:60];
+    if (self.headerFields != nil) {
+        NSLog(@"MWFeedParser.parse(), headerFields [%@]",self.headerFields);
+        [request setAllHTTPHeaderFields:self.headerFields];
+    }
 	[request setValue:@"MWFeedParser" forHTTPHeaderField:@"User-Agent"];
 	
 	// Debug Log
@@ -389,7 +400,7 @@
 #pragma mark NSURLConnection Delegate (Async)
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-	[asyncData setLength:0];
+    [asyncData setLength:0];
 	self.asyncTextEncodingName = [response textEncodingName];
 }
 
